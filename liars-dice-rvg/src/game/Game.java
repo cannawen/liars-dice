@@ -1,26 +1,35 @@
 package game;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import strategies.ChallengeStrat;
+import strategies.IncreaseFace;
+import strategies.IncreaseQuantity;
+import strategies.NoHistoryStrat;
+import strategies.Strategy;
+
 public class Game {
-    
-    public static Move play(GameState state) {
-        return Move.challenge();
+
+    static GameState state;
+
+    public static void init(GameState _state) {
+        Game.state = _state;
     }
 
-    public static List<Move> escelate(GameState state) {
-        Move move = state.history.get(state.history.size() - 1).move;
+    public static Move play() {
+        List<Strategy> strategies = Arrays.asList(
+            new NoHistoryStrat(state),
+            new ChallengeStrat(state),
+            new IncreaseFace(state),
+            new IncreaseQuantity(state)
+        );
 
-        List<Move> escalations = new ArrayList<>();
-
-        for (int face = move.face + 1; face <= GameConstants.MAX_FACE; face++) {
-            escalations.add(Move.bid(move.quantity, face));
-        }
-        for (int face = GameConstants.MIN_FACE; face <= GameConstants.MAX_FACE; face++) {
-            escalations.add(Move.bid(move.quantity + 1, face));
-        }
-
-        return escalations;
+        return strategies.stream()
+            .filter(Strategy::triggered)
+            .findFirst()
+            .map(Strategy::nextMove)
+            .orElseThrow();
     }
+
 }

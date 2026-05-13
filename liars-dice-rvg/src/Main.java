@@ -17,7 +17,8 @@ public class Main {
 
     static String run(JSONObject obj) {
         GameState state = new GameState(obj);
-        return String.valueOf(Game.play(state));
+        Game.init(state);
+        return String.valueOf(Game.play());
     }
 }
 
