@@ -1,0 +1,7 @@
+{:bot/build-artifact "out/Main.jar"
+ :bot/build-cmd "mkdir -p out && cp json.jar out/ && cd out && jar xf json.jar && cd .. && javac -cp json.jar -d out src/Main.java src/game/Game.java src/game/GameConstants.java src/game/GameState.java src/game/Move.java src/strategies/Strategy.java src/strategies/ChallengeStrat.java src/strategies/IncreaseFace.java src/strategies/IncreaseQuantity.java src/strategies/NoHistoryStrat.java src/strategies/ChallengeUnlikelyStrat.java && jar cfe out/Main.jar Main -C out ."
+ :bot/env "generic-jvm"
+ :bot/game "liars-dice"
+ :bot/id #uuid "019e21de-f004-73b0-8527-72b85b63cafb"
+ :bot/name "gfq"
+ :bot/run-cmd "java -jar out/Main.jar"}
