@@ -9,6 +9,7 @@ import strategies.IncreaseFace;
 import strategies.IncreaseQuantity;
 import strategies.NoHistoryStrat;
 import strategies.Strategy;
+import strategies.TruthStrat;
 
 public class Game {
 
@@ -22,6 +23,7 @@ public class Game {
         List<Strategy> strategies = Arrays.asList(
             new NoHistoryStrat(state),
             new ChallengeUnlikelyStrat(state),
+            new TruthStrat(state),
             new IncreaseQuantity(state),
             new IncreaseFace(state),
             new ChallengeStrat(state)

@@ -3,7 +3,10 @@ package strategies;
 import game.GameConstants;
 import game.GameState;
 import game.Move;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,20 +18,28 @@ public abstract class Strategy {
     }
 
     public Map<Integer, Integer> diceFrequencies() {
-        Map<Integer, Integer> freq = defaultDiceFrequencies();
-        myDiceFrequencies().forEach((face, count) -> freq.merge(face, count, Integer::sum));
-        return freq;
+        if (state.history.size() >= GameConstants.TRUTH_ROUND) {
+            return merge(myDiceFrequencies(), theirDiceFrequencies());
+        } else {
+            return merge(myDiceFrequencies(), defaultDiceFrequencies());
+        }
+    }
+
+    public Map<Integer, Integer> merge(Map<Integer, Integer> a, Map<Integer, Integer> b) {
+        Map<Integer, Integer> result = new HashMap<>(a);
+        b.forEach((key, value) -> result.merge(key, value, Integer::sum));
+        return result;
     }
     
-    // public Map<Integer, Integer> theirDiceFrequencies() {
-    //     Map<Integer, Integer> freq = new HashMap<>();
-    //     for (GameState.HistoryEntry entry : state.history) {
-    //         if (entry.playerId != state.myId && entry.move.action == Move.Action.BID) {
-    //             freq.merge(entry.move.face, entry.move.quantity, Integer::max);
-    //         }
-    //     }
-    //     return freq;
-    // }
+    public Map<Integer, Integer> theirDiceFrequencies() {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (GameState.HistoryEntry entry : state.history) {
+            if (entry.playerId != state.myId && entry.move.action == Move.Action.BID) {
+                freq.merge(entry.move.face, entry.move.quantity, Integer::max);
+            }
+        }
+        return freq;
+    }
 
     public Map<Integer, Integer> defaultDiceFrequencies() {
         Map<Integer, Integer> freq = new HashMap<>();
@@ -72,6 +83,31 @@ public abstract class Strategy {
             }
         }
         return Optional.empty();
+    }
+
+    public List<Move> legalMoves() {
+        List<Move> moves = new ArrayList<>();
+        Optional<Move> last = lastMove();
+
+        Map<Integer, Integer> freq = diceFrequencies();
+        for (int face = GameConstants.MIN_FACE; face <= GameConstants.MAX_FACE; face++) {
+            int maxQty = freq.getOrDefault(face, 0);
+            for (int qty = 1; qty <= maxQty; qty++) {
+                if (isHigherBid(qty, face, last)) {
+                    moves.add(Move.bid(qty, face));
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    private boolean isHigherBid(int qty, int face, Optional<Move> last) {
+        if (!last.isPresent() || last.get().action != Move.Action.BID) {
+            return true;
+        }
+        Move lastBid = last.get();
+        return qty > lastBid.quantity || (qty == lastBid.quantity && face > lastBid.face);
     }
 
     public abstract Boolean triggered();

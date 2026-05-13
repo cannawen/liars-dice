@@ -11,13 +11,12 @@ public class IncreaseQuantity extends Strategy {
 
     @Override
     public Boolean triggered() {
-        return myLastMove().isPresent();
+        return lastMove().isPresent();
     }
 
     @Override
     public Move nextMove() {
-        Move move = myLastMove().get();
-        Move lastMove = lastMove().get();
-        return Move.bid(lastMove.quantity + 1, move.face);
+        Move move = lastMove().get();
+        return Move.bid(move.quantity + 1, move.face);
     }
 }
