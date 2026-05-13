@@ -64,6 +64,16 @@ public abstract class Strategy {
         }
     }
 
+    public Optional<Move> myLastMove() {
+        for (int i = state.history.size() - 1; i >= 0; i--) {
+            GameState.HistoryEntry entry = state.history.get(i);
+            if (entry.playerId == state.myId) {
+                return Optional.of(entry.move);
+            }
+        }
+        return Optional.empty();
+    }
+
     public abstract Boolean triggered();
 
     public abstract Move nextMove();
