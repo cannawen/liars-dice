@@ -12,7 +12,6 @@ public class ChallengeStrat extends Strategy {
     @Override
     public Boolean triggered() {
         return state.history.size() > 4;
-        // TODO see if they raised my bullshit
     }
 
     @Override
