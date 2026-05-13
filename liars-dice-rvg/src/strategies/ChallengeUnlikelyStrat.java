@@ -3,14 +3,15 @@ package strategies;
 import game.GameState;
 import game.Move;
 
-public class ChallengeStrat extends Strategy {
-    public ChallengeStrat(GameState state) {
+public class ChallengeUnlikelyStrat extends Strategy {
+    public ChallengeUnlikelyStrat(GameState state) {
         super(state);
     }
 
     @Override
     public Boolean triggered() {
-        return true;
+        Move move = lastMove().get();
+        return move.quantity > diceFrequencies().get(move.face);
     }
 
     @Override

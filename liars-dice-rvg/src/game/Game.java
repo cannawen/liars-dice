@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import strategies.ChallengeStrat;
+import strategies.ChallengeUnlikelyStrat;
 import strategies.IncreaseFace;
 import strategies.IncreaseQuantity;
 import strategies.NoHistoryStrat;
@@ -20,9 +21,10 @@ public class Game {
     public static Move play() {
         List<Strategy> strategies = Arrays.asList(
             new NoHistoryStrat(state),
-            new ChallengeStrat(state),
+            new ChallengeUnlikelyStrat(state),
+            new IncreaseQuantity(state),
             new IncreaseFace(state),
-            new IncreaseQuantity(state)
+            new ChallengeStrat(state)
         );
 
         return strategies.stream()

@@ -15,11 +15,32 @@ public abstract class Strategy {
     }
 
     public Map<Integer, Integer> diceFrequencies() {
+        Map<Integer, Integer> freq = defaultDiceFrequencies();
+        myDiceFrequencies().forEach((face, count) -> freq.merge(face, count, Integer::sum));
+        return freq;
+    }
+    
+    // public Map<Integer, Integer> theirDiceFrequencies() {
+    //     Map<Integer, Integer> freq = new HashMap<>();
+    //     for (GameState.HistoryEntry entry : state.history) {
+    //         if (entry.playerId != state.myId && entry.move.action == Move.Action.BID) {
+    //             freq.merge(entry.move.face, entry.move.quantity, Integer::max);
+    //         }
+    //     }
+    //     return freq;
+    // }
+
+    public Map<Integer, Integer> defaultDiceFrequencies() {
         Map<Integer, Integer> freq = new HashMap<>();
         freq.put(1, 1);
         for (int face = 2; face <= GameConstants.MAX_FACE; face++) {
             freq.put(face, 2);
         }
+        return freq;
+    }
+    
+    public Map<Integer, Integer> myDiceFrequencies() {
+        Map<Integer, Integer> freq = new HashMap<>();
         int wilds = 0;
         for (int die : state.myDice) {
             if (die == 1) {
