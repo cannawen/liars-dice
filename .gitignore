@@ -1,0 +1,12 @@
+# Compiled Java classes and jars (except vendored dependencies)
+*.class
+out/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store

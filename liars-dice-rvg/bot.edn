@@ -1,0 +1,7 @@
+{:bot/build-artifact "out/Main.jar"
+ :bot/build-cmd "mkdir -p out && cp json.jar out/ && cd out && jar xf json.jar && cd .. && javac -cp json.jar -d out src/Main.java src/game/Game.java src/game/GameConstants.java src/game/GameState.java src/game/Move.java && jar cfe out/Main.jar Main -C out ."
+ :bot/env "generic-jvm"
+ :bot/game "liars-dice"
+ :bot/id #uuid "019e180b-a7d4-7cab-9b88-c75fa43e8d21"
+ :bot/name "rvg"
+ :bot/run-cmd "java -jar out/Main.jar"}
