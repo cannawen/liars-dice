@@ -18,11 +18,7 @@ public abstract class Strategy {
     }
 
     public Map<Integer, Integer> diceFrequencies() {
-        if (state.history.size() >= GameConstants.TRUTH_ROUND) {
-            return merge(myDiceFrequencies(), theirDiceFrequencies());
-        } else {
-            return merge(myDiceFrequencies(), defaultDiceFrequencies());
-        }
+        return merge(myDiceFrequencies(), defaultDiceFrequencies());
     }
 
     public Map<Integer, Integer> merge(Map<Integer, Integer> a, Map<Integer, Integer> b) {
@@ -31,15 +27,22 @@ public abstract class Strategy {
         return result;
     }
     
-    public Map<Integer, Integer> theirDiceFrequencies() {
-        Map<Integer, Integer> freq = new HashMap<>();
-        for (GameState.HistoryEntry entry : state.history) {
-            if (entry.playerId != state.myId && entry.move.action == Move.Action.BID) {
-                freq.merge(entry.move.face, entry.move.quantity, Integer::max);
-            }
-        }
-        return freq;
-    }
+    // public Map<Integer, Integer> theirDiceFrequencies() {
+    //     Map<Integer, Integer> freq = new HashMap<>();
+    //     Map<Integer, Integer> myFreq = myDiceFrequencies();
+    //     int opponentMoveCount = 0;
+    //     for (GameState.HistoryEntry entry : state.history) {
+    //         if (entry.playerId != state.myId && entry.move.action == Move.Action.BID) {
+    //             if (opponentMoveCount >= 3) break;
+    //             opponentMoveCount++;
+    //             int adjustedQty = entry.move.quantity - myFreq.getOrDefault(entry.move.face, 0);
+    //             if (adjustedQty > 0) {
+    //                 freq.merge(entry.move.face, adjustedQty, Integer::max);
+    //             }
+    //         }
+    //     }
+    //     return freq;
+    // }
 
     public Map<Integer, Integer> defaultDiceFrequencies() {
         Map<Integer, Integer> freq = new HashMap<>();
